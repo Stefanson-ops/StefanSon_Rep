@@ -234,7 +234,9 @@ public class Character_Controller : MonoBehaviour
     }
     void Climbing()
     {
-        rb.velocity = new Vector3(rb.velocity.x, ClimbSpeed, rb.velocity.z);
+        //rb.velocity = new Vector3(rb.velocity.x, ClimbSpeed, rb.velocity.z);
+        rb.velocity = new Vector3(0, ClimbSpeed, 0);
+
     }
     void StopClimbing()
     {

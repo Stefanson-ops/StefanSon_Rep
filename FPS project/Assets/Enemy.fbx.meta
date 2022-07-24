@@ -18,6 +18,9 @@ ModelImporter:
   - first:
       74: 8349542763059015795
     second: Armature|Walk
+  - first:
+      74: -1313539069273716818
+    second: Armature|Die (1)
   externalObjects: {}
   materials:
     materialImportMode: 2
@@ -47,11 +50,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Armature|Action
-      takeName: Armature|Action
+      name: Armature|Die (1)
+      takeName: Armature|Die
       internalID: 0
       firstFrame: 0
-      lastFrame: 1
+      lastFrame: 60
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -100,7 +103,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 1
+      - time: 0.99369085
         functionName: Die
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 8e04434c516404e44a7ccfce0390366d, type: 3}

@@ -1597,7 +1597,7 @@ Animator:
   m_Avatar: {fileID: 9000000, guid: 2c6d89f9ebdb67044a0a6842fd31b5e8, type: 3}
   m_Controller: {fileID: 9100000, guid: 7b0afc05e2459c74a91e69292d50d070, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 1
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
@@ -1634,7 +1634,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHP: 100
-  CurrentHP: 30
+  CurrentHP: 60
   IsStanned: 0
   FatalPosition: {fileID: 0}
   FatalPosition1: {fileID: 8051105807144613961}

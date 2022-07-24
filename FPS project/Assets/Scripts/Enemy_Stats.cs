@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy_Stats : MonoBehaviour
 {
-    Enemy_Controller EController;
+    public Enemy_Controller EController;
     public float MaxHP;
     public float CurrentHP;
     public bool IsStanned;

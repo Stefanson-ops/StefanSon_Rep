@@ -53,7 +53,9 @@ public class Combat_Controller : MonoBehaviour
         MyInput();
         if (HaveGun)
             MoveGunToHand();
-        Physics.Raycast(Camera.position, Camera.forward, out EnemyHit, 1000);
+        if(HaveGun)
+            SetVisible();
+        //Physics.Raycast(Camera.position, Camera.forward, out EnemyHit, 1000);
     }
     private void FixedUpdate()
     {
@@ -121,14 +123,14 @@ public class Combat_Controller : MonoBehaviour
     {
         if (Input.GetKeyDown(FatalityKey) && Estats != null)
         {
-            if (Estats.IsStanned && !InAction && Hit.collider.GetComponentInParent<Enemy_Controller>().StillAlive)
+            if (Estats.IsStanned && !InAction && Estats.EController.StillAlive)
             {
                 InAction = true;
                 Controller.CanMove = false;
                 CameraController.CanLook = false;
                 Controller.rb.isKinematic = true;
                 StartCoroutine(FatalityDuration());
-                Hit.collider.GetComponentInParent<Enemy_Controller>().InGrab();
+                Estats.EController.InGrab();
             }
         }
         if (Input.GetKeyDown(KeyCode.E) && GrabPoint != null)
@@ -137,14 +139,19 @@ public class Combat_Controller : MonoBehaviour
             Controller.Grappling(GrabPoint, GrabForce);
             Invoke(nameof(ReloadGrappling), GrabReloadTime);
         }
-        if (Input.GetKeyDown(TakeGunKey)&& CanTakeGun)
+        if (Input.GetKeyDown(TakeGunKey) && CanTakeGun)
         {
             if (!HaveGun)
                 CheckForGun();
             else
                 ThrowGun();
         }
+        if (Input.GetKey(KeyCode.Mouse0) && HaveGun && !InAction)
+        {
+            CurrentGun.GetComponent<Gun_Controller>().Shoot();
+        }
     }
+    #region Shooting
     void CheckForGun()
     {
         //if (Physics.Raycast(Camera.position, Camera.forward, out GunHit, TakeGunDistanse, WhatIsGun))
@@ -156,6 +163,7 @@ public class Combat_Controller : MonoBehaviour
                 {
                     CurrentGun = GunHit.collider.gameObject;
                     CurrentGun.GetComponent<Rigidbody>().isKinematic = true;
+                    CurrentGun.GetComponent<Gun_Controller>().FPSCamera = CameraController.CameraHolder;
                     Invoke(nameof(GetGun), 0.5f);
                     HaveGun = true;
 
@@ -199,4 +207,12 @@ public class Combat_Controller : MonoBehaviour
     {
         CanTakeGun = true;
     }
+    void SetVisible()
+    {
+        if (InAction)
+            CurrentGun.SetActive(false);
+        else
+            CurrentGun.SetActive(true);
+    }
+    #endregion
 }

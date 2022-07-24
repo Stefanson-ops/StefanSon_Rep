@@ -15,7 +15,6 @@ public class Enemy_Controller : MonoBehaviour
     Rigidbody[] Bodies;
     NavMeshAgent Agent;
     bool CanEnemyMove;
-
     private void Start()
     {
         EStats = GetComponent<Enemy_Stats>();
@@ -26,6 +25,7 @@ public class Enemy_Controller : MonoBehaviour
         Agent = GetComponent<NavMeshAgent>();
         ResetRagdoll();
         CanEnemyMove = true;
+
     }
     private void Update()
     {
@@ -33,6 +33,7 @@ public class Enemy_Controller : MonoBehaviour
         {
             EnemyStateMachine();
         }
+
     }
     void EnemyStateMachine()
     {
@@ -76,9 +77,9 @@ public class Enemy_Controller : MonoBehaviour
                 rb.isKinematic = true;
             }
         else
+        {
             foreach (Rigidbody rb in Bodies)
-            {
                 rb.isKinematic = false;
-            }
+        }
     }
 }

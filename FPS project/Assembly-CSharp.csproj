@@ -59,11 +59,12 @@
     <Compile Include="Assets\Scripts\Enemy_Controller.cs" />
     <Compile Include="Assets\Scripts\Camera_Controller.cs" />
     <Compile Include="Assets\Other\URP Start Folders\TutorialInfo\Scripts\Readme.cs" />
+    <Compile Include="Assets\Gun_Controller.cs" />
     <Compile Include="Assets\Other\URP Start Folders\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\Scripts\Character_Controller.cs" />
     <Compile Include="Assets\Scripts\Combat_Controller.cs" />
     <Compile Include="Assets\Scripts\Enemy_Stats.cs" />
-    <Compile Include="Assets\Gun_Controller.cs" />
+    <Compile Include="Assets\Bullet_Controller.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

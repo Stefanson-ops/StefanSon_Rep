@@ -878,7 +878,7 @@ GameObject:
   - component: {fileID: 3761035207830541436}
   m_Layer: 8
   m_Name: Empty.001
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1633,8 +1633,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5aeeaf456753204bb8900ebe70a84e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EController: {fileID: 0}
   MaxHP: 100
-  CurrentHP: 60
+  CurrentHP: 100
   IsStanned: 0
   FatalPosition: {fileID: 0}
   FatalPosition1: {fileID: 8051105807144613961}
@@ -3357,7 +3358,7 @@ GameObject:
   - component: {fileID: 5259805248308591350}
   m_Layer: 8
   m_Name: Empty
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4281,7 +4282,7 @@ GameObject:
   - component: {fileID: 8051105807144613961}
   m_Layer: 8
   m_Name: Fatal Position Front
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4311,7 +4312,7 @@ GameObject:
   - component: {fileID: 8051105807730794708}
   m_Layer: 8
   m_Name: Look Point
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4341,7 +4342,7 @@ GameObject:
   - component: {fileID: 8051105807817177106}
   m_Layer: 8
   m_Name: Fatal Position Back
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

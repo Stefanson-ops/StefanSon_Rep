@@ -13,10 +13,6 @@ public class Gun_Controller : MonoBehaviour
     public GameObject Bullet;
     public Transform FPSCamera;
     Vector3 TargetPoint;
-    private void Start()
-    {
-        
-    }
     public void Shoot()
     {
         if (CanShoot)
@@ -31,7 +27,13 @@ public class Gun_Controller : MonoBehaviour
             float x = Random.Range(-Spread, Spread);
             float y = Random.Range(-Spread, Spread);
             Vector3 DirectionWithSpread = DirectionWithoutSpread + new Vector3(x, y, 0);
-            GameObject CurrentBullet = Instantiate(Bullet, BulletPoint.position, Quaternion.identity);
+
+            Quaternion rot = Quaternion.LookRotation(DirectionWithSpread - BulletPoint.position);
+
+            BulletPoint.rotation = rot;
+
+            GameObject CurrentBullet = Instantiate(Bullet, BulletPoint.position, BulletPoint.rotation);
+
             CurrentBullet.GetComponent<Bullet_Controller>().Dmg = Damage;
             CurrentBullet.transform.forward = DirectionWithSpread.normalized;
             CurrentBullet.GetComponent<Rigidbody>().AddForce(DirectionWithSpread.normalized * BulletSpeed, ForceMode.Impulse);

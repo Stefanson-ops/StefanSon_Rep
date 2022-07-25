@@ -17,6 +17,7 @@ public class Character_Controller : MonoBehaviour
     public KeyCode JumpButton;
     public bool CanMove;
 
+    [Space]
     [Header("Climbing")]
     public Transform Camera;
     public float MaxWallLookAngle;
@@ -34,6 +35,7 @@ public class Character_Controller : MonoBehaviour
     public float PlayerHeight;
     public bool IsSliding;
 
+    [Space]
     [Header("Wall Running")]
     public float WallJumpUpForce;
     public float WallJumpSideForce;
@@ -49,8 +51,7 @@ public class Character_Controller : MonoBehaviour
     bool WallRight;
     bool WallRunning;
 
-
-
+    [Space]
     [Header("Components")]
     public Rigidbody rb;
     Combat_Controller CombatController;
@@ -140,7 +141,7 @@ public class Character_Controller : MonoBehaviour
         }
         else
         {
-            if(WallRunning)
+            if (WallRunning)
                 StopWallRun();
         }
 
@@ -189,7 +190,7 @@ public class Character_Controller : MonoBehaviour
             rb.velocity = new Vector3(limitedVelocity.x, rb.velocity.y, limitedVelocity.z);
         }
     }
-    public void Grappling(Transform GrabPoint,float GrabForce)
+    public void Grappling(Transform GrabPoint, float GrabForce)
     {
         rb.velocity = new Vector3(0, 0, 0);
         rb.AddForce((GrabPoint.position - transform.position) * GrabForce, ForceMode.Impulse);
@@ -234,9 +235,7 @@ public class Character_Controller : MonoBehaviour
     }
     void Climbing()
     {
-        //rb.velocity = new Vector3(rb.velocity.x, ClimbSpeed, rb.velocity.z);
         rb.velocity = new Vector3(0, ClimbSpeed, 0);
-
     }
     void StopClimbing()
     {

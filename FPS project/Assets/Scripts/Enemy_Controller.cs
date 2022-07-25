@@ -8,13 +8,13 @@ public class Enemy_Controller : MonoBehaviour
     public float WalkSpeed;
     public float RunSpeed;
     public float MinDistanseToPlayer;
-    Enemy_Stats EStats;
     public bool StillAlive;
     public Transform Player;
-    Animator Anim;
-    Rigidbody[] Bodies;
-    NavMeshAgent Agent;
     bool CanEnemyMove;
+    Rigidbody[] Bodies;
+    Animator Anim;
+    NavMeshAgent Agent;
+    Enemy_Stats EStats;
     private void Start()
     {
         EStats = GetComponent<Enemy_Stats>();
@@ -25,7 +25,6 @@ public class Enemy_Controller : MonoBehaviour
         Agent = GetComponent<NavMeshAgent>();
         ResetRagdoll();
         CanEnemyMove = true;
-
     }
     private void Update()
     {
@@ -33,36 +32,43 @@ public class Enemy_Controller : MonoBehaviour
         {
             EnemyStateMachine();
         }
-
     }
     void EnemyStateMachine()
     {
         float DistanseToPlayer = Vector3.Distance(transform.position, Player.position);
-        if (!EStats.IsStanned && DistanseToPlayer > MinDistanseToPlayer)
+        if (!EStats.IsStanned)
         {
-            Agent.SetDestination(Player.position);
-            Agent.speed = WalkSpeed;
-            if (DistanseToPlayer > MinDistanseToPlayer * 2)
+            if (DistanseToPlayer > MinDistanseToPlayer)
             {
-                Anim.SetInteger("State", 2);
-                Agent.speed = RunSpeed;
+                Agent.SetDestination(Player.position);
+                Agent.speed = WalkSpeed;
+                if (DistanseToPlayer > MinDistanseToPlayer * 2)
+                {
+                    Anim.SetInteger("State", 2);
+                    Agent.speed = RunSpeed;
+                }
+                else
+                    Anim.SetInteger("State", 1);
             }
             else
-                Anim.SetInteger("State", 1);
+            {
+                Anim.SetInteger("State", 0);
+                Agent.speed = 0;
+            }
         }
         else
         {
-            Anim.SetInteger("State", 0);
+            Anim.SetInteger("State", 5);
             Agent.speed = 0;
         }
     }
     public void InGrab()
     {
-        Anim.SetInteger("State", Random.Range(3,5));
+        Anim.SetInteger("State", Random.Range(3, 5));
 
         CanEnemyMove = false;
     }
-    void Die()
+    public void Die()
     {
         StillAlive = false;
         Anim.enabled = false;
@@ -73,9 +79,7 @@ public class Enemy_Controller : MonoBehaviour
     {
         if (StillAlive)
             foreach (Rigidbody rb in Bodies)
-            {
                 rb.isKinematic = true;
-            }
         else
         {
             foreach (Rigidbody rb in Bodies)

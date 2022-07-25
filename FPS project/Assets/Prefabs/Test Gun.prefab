@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 856935211745778258}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.75}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4562554026704106465}
@@ -156,10 +156,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87d541850f9b1404ebd74cf21924a7ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Spread: 1
-  Damage: 1
+  Spread: 0
+  Damage: 10
   BulletSpeed: 50
-  TimeBetweenShots: 0.1
+  TimeBetweenShots: 0.2
   BulletPoint: {fileID: 6569711180542050094}
   Bullet: {fileID: 3424618394463675465, guid: f7f9d80c842aae742894e51a5bd5c4bf, type: 3}
   FPSCamera: {fileID: 0}

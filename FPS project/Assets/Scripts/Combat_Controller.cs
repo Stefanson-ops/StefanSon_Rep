@@ -5,6 +5,7 @@ using UnityEngine;
 public class Combat_Controller : MonoBehaviour
 {
     [Header("Shooting")]
+    public KeyCode ShootKey;
     public float GunSpeed;
     public float GunThrowForce;
     public LayerMask WhatIsGun;
@@ -17,6 +18,8 @@ public class Combat_Controller : MonoBehaviour
     bool CanShoot;
     public KeyCode TakeGunKey;
     bool CanTakeGun;
+
+    [Space]
     [Header("Fatality")]
     public bool InAction;
     public Transform Camera;
@@ -24,7 +27,9 @@ public class Combat_Controller : MonoBehaviour
     public float FatalityDistanse;
     public KeyCode FatalityKey;
 
+    [Space]
     [Header("Grappling")]
+    public KeyCode GrabKey;
     public float GrabForce;
     public float GrabReloadTime;
     public bool CanGrab;
@@ -32,6 +37,7 @@ public class Combat_Controller : MonoBehaviour
     public float GrabDistanse;
     public Transform GrabPoint;
 
+    [Space]
     [Header("Components")]
     Character_Controller Controller;
     Camera_Controller CameraController;
@@ -53,9 +59,8 @@ public class Combat_Controller : MonoBehaviour
         MyInput();
         if (HaveGun)
             MoveGunToHand();
-        if(HaveGun)
+        if (HaveGun)
             SetVisible();
-        //Physics.Raycast(Camera.position, Camera.forward, out EnemyHit, 1000);
     }
     private void FixedUpdate()
     {
@@ -86,10 +91,13 @@ public class Combat_Controller : MonoBehaviour
             RaycastHit hit;
             if (Physics.SphereCast(Camera.position - transform.forward / 2, 1, Camera.forward, out Hit, FatalityDistanse, WhatIsEnemy))
             {
-                if (Physics.SphereCast(Camera.position - transform.forward / 2, 1, Camera.forward, out hit, FatalityDistanse) && hit.collider.CompareTag("Enemy"))
+                if (Physics.Raycast(Camera.position, Camera.forward, out hit, FatalityDistanse))
                 {
-                    Estats = Hit.collider.GetComponentInParent<Enemy_Stats>();
-                    print("Enemy");
+                    if (hit.collider.CompareTag("Enemy"))
+                    {
+                        Estats = Hit.collider.GetComponentInParent<Enemy_Stats>();
+                        print("Enemy");
+                    }
                 }
             }
             else
@@ -119,42 +127,9 @@ public class Combat_Controller : MonoBehaviour
         CanGrab = true;
     }
     #endregion
-    void MyInput()
-    {
-        if (Input.GetKeyDown(FatalityKey) && Estats != null)
-        {
-            if (Estats.IsStanned && !InAction && Estats.EController.StillAlive)
-            {
-                InAction = true;
-                Controller.CanMove = false;
-                CameraController.CanLook = false;
-                Controller.rb.isKinematic = true;
-                StartCoroutine(FatalityDuration());
-                Estats.EController.InGrab();
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.E) && GrabPoint != null)
-        {
-            CanGrab = false;
-            Controller.Grappling(GrabPoint, GrabForce);
-            Invoke(nameof(ReloadGrappling), GrabReloadTime);
-        }
-        if (Input.GetKeyDown(TakeGunKey) && CanTakeGun)
-        {
-            if (!HaveGun)
-                CheckForGun();
-            else
-                ThrowGun();
-        }
-        if (Input.GetKey(KeyCode.Mouse0) && HaveGun && !InAction)
-        {
-            CurrentGun.GetComponent<Gun_Controller>().Shoot();
-        }
-    }
     #region Shooting
     void CheckForGun()
     {
-        //if (Physics.Raycast(Camera.position, Camera.forward, out GunHit, TakeGunDistanse, WhatIsGun))
         if (Physics.SphereCast(Camera.position - transform.forward / 2, 1, Camera.forward, out GunHit, TakeGunDistanse, WhatIsGun))
         {
             if (Physics.Raycast(Camera.position, GunHit.collider.gameObject.transform.position - Camera.position, out GunHit, TakeGunDistanse))
@@ -174,7 +149,7 @@ public class Combat_Controller : MonoBehaviour
     void MoveGunToHand()
     {
         CurrentGun.transform.position = Vector3.Lerp(CurrentGun.transform.position, GunPosition.position, GunSpeed * Time.deltaTime);
-        CurrentGun.transform.rotation = Quaternion.RotateTowards(CurrentGun.transform.rotation, GunPosition.rotation, GunSpeed*10 * Time.deltaTime);
+        CurrentGun.transform.rotation = Quaternion.RotateTowards(CurrentGun.transform.rotation, GunPosition.rotation, GunSpeed * 10 * Time.deltaTime);
     }
     void ThrowGun()
     {
@@ -200,7 +175,7 @@ public class Combat_Controller : MonoBehaviour
     }
     void GetGun()
     {
-        if(CurrentGun!=null)
+        if (CurrentGun != null)
             CurrentGun.transform.SetParent(GunPosition);
     }
     void ReloadCanTakeGun()
@@ -215,4 +190,36 @@ public class Combat_Controller : MonoBehaviour
             CurrentGun.SetActive(true);
     }
     #endregion
+    void MyInput()
+    {
+        if (Input.GetKeyDown(FatalityKey) && Estats != null)
+        {
+            if (Estats.IsStanned && !InAction && Estats.EController.StillAlive)
+            {
+                InAction = true;
+                Controller.CanMove = false;
+                CameraController.CanLook = false;
+                Controller.rb.isKinematic = true;
+                StartCoroutine(FatalityDuration());
+                Estats.EController.InGrab();
+            }
+        }
+        if (Input.GetKeyDown(GrabKey) && GrabPoint != null)
+        {
+            CanGrab = false;
+            Controller.Grappling(GrabPoint, GrabForce);
+            Invoke(nameof(ReloadGrappling), GrabReloadTime);
+        }
+        if (Input.GetKeyDown(TakeGunKey) && CanTakeGun)
+        {
+            if (!HaveGun)
+                CheckForGun();
+            else
+                ThrowGun();
+        }
+        if (Input.GetKey(ShootKey) && HaveGun && !InAction)
+        {
+            CurrentGun.GetComponent<Gun_Controller>().Shoot();
+        }
+    }
 }

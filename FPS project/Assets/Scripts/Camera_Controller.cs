@@ -22,6 +22,7 @@ public class Camera_Controller : MonoBehaviour
         Controller = GetComponentInParent<Character_Controller>();
         Cursor.lockState = CursorLockMode.Locked;
         CanLook = true;
+        
     }
     private void Update()
     {
@@ -32,8 +33,6 @@ public class Camera_Controller : MonoBehaviour
     }
     public void ResetCameraRotation()
     {
-        //VerticalCamRotation = CameraHolder.rotation.y;
-        //HorizontalCamRotation = CameraHolder.rotation.x;
         HorizontalCamRotation = -CameraHolder.eulerAngles.x;
         VerticalCamRotation = CameraHolder.eulerAngles.y;
     }
@@ -44,7 +43,7 @@ public class Camera_Controller : MonoBehaviour
 
         HorizontalCamRotation += MouseY;
         VerticalCamRotation += MouseX;
-        
+
         HorizontalCamRotation = Mathf.Clamp(HorizontalCamRotation, -LookXLimit, LookXLimit);
 
         CameraHolder.rotation = Quaternion.Euler(-HorizontalCamRotation, VerticalCamRotation, RotationZ);
@@ -61,7 +60,7 @@ public class Camera_Controller : MonoBehaviour
     }
     void CameraShake()
     {
-        if(Controller.rb.velocity.magnitude>10)
+        if (Controller.rb.velocity.magnitude > 10)
         {
 
 

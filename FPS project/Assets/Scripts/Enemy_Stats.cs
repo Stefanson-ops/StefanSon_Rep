@@ -18,8 +18,10 @@ public class Enemy_Stats : MonoBehaviour
     }
     private void Update()
     {
-        if (CurrentHP < 40)
+        if (CurrentHP < 50)
             IsStanned = true;
+        if (CurrentHP < 0)
+            EController.Die();
         NearFatalPointPosition();
     }
     void NearFatalPointPosition()

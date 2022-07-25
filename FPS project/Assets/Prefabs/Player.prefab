@@ -276,6 +276,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f59b47871a72c44c816ecad77427854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShootKey: 323
   GunSpeed: 20
   GunThrowForce: 30
   WhatIsGun:
@@ -291,6 +292,7 @@ MonoBehaviour:
     m_Bits: 256
   FatalityDistanse: 15
   FatalityKey: 102
+  GrabKey: 101
   GrabForce: 2
   GrabReloadTime: 1
   CanGrab: 0

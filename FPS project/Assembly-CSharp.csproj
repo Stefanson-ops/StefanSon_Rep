@@ -63,9 +63,12 @@
     <Compile Include="Assets\Other\URP Start Folders\Scripts\SimpleCameraController.cs" />
     <Compile Include="Assets\Scripts\Character_Controller.cs" />
     <Compile Include="Assets\Scripts\Combat_Controller.cs" />
+    <Compile Include="Assets\Destroyer.cs" />
     <Compile Include="Assets\Bullet_Controller.cs" />
     <Compile Include="Assets\Scripts\Enemy_Stats.cs" />
-    <Compile Include="Assets\Destroyer.cs" />
+    <Compile Include="Assets\CableComponent.cs" />
+    <Compile Include="Assets\CableParticle.cs" />
+    <Compile Include="Assets\Hook_Point_Controller.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

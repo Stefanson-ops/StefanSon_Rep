@@ -137,7 +137,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -182,6 +182,7 @@ GameObject:
   - component: {fileID: 8897171183055930288}
   - component: {fileID: 8897171183055930289}
   - component: {fileID: 8897171183055930290}
+  - component: {fileID: 377264752}
   m_Layer: 2
   m_Name: Player
   m_TagString: Player
@@ -248,13 +249,14 @@ MonoBehaviour:
   Camera: {fileID: 8897171184003509074}
   MaxWallLookAngle: 30
   IsClimbing: 0
-  MaxClimbTime: 0.75
+  MaxClimbTime: 2
   ClimbSpeed: 8
   DetectionLength: 0.7
   WhatIsWall:
     serializedVersion: 2
     m_Bits: 115
-  PlayerHeight: 2
+  StandPlayerHeight: 2
+  SlidePlayerHeight: 1
   IsSliding: 0
   WallJumpUpForce: 7
   WallJumpSideForce: 20
@@ -292,13 +294,35 @@ MonoBehaviour:
     m_Bits: 256
   FatalityDistanse: 15
   FatalityKey: 102
+  HookEnd: {fileID: 0}
   GrabKey: 101
-  GrabForce: 2
+  GrabDistanse: 100
   GrabReloadTime: 1
+  IsHoldingOn: 0
   CanGrab: 0
-  GrabDistanse: 10
   GrabPoint: {fileID: 0}
   Estats: {fileID: 0}
+--- !u!114 &377264752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8897171183055930294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecb34c9f4a52638478edd96e51fce7ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endPoint: {fileID: 0}
+  cableMaterial: {fileID: 2100000, guid: fdde79b299d64d74eabebd3b3b5f194b, type: 2}
+  cableLength: 20
+  totalSegments: 20
+  segmentsPerUnit: 1
+  cableWidth: 0.1
+  verletIterations: 1
+  solverIterations: 5
+  stiffness: 1
 --- !u!1 &8897171183237418118
 GameObject:
   m_ObjectHideFlags: 0

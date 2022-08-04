@@ -32,8 +32,11 @@ public class Character_Controller : MonoBehaviour
     private float ClimbTime;
 
     [Header("Sliding")]
-    public float PlayerHeight;
+    public float StandPlayerHeight;
+    public float SlidePlayerHeight;
+    float PlayerHeight;
     public bool IsSliding;
+    CapsuleCollider Coll;
 
     [Space]
     [Header("Wall Running")]
@@ -54,6 +57,7 @@ public class Character_Controller : MonoBehaviour
     [Space]
     [Header("Components")]
     public Rigidbody rb;
+    SpringJoint joint;
     Combat_Controller CombatController;
     Vector3 MoveDirection;
     float Hor;
@@ -62,6 +66,7 @@ public class Character_Controller : MonoBehaviour
 
     private void Start()
     {
+        Coll = GetComponentInChildren<CapsuleCollider>();
         CamController = GetComponentInChildren<Camera_Controller>();
         rb = GetComponent<Rigidbody>();
         CombatController = GetComponent<Combat_Controller>();
@@ -108,7 +113,7 @@ public class Character_Controller : MonoBehaviour
         else
         {
             CanMove = true;
-            PlayerHeight = 2;
+            PlayerHeight = StandPlayerHeight;
             IsSliding = false;
         }
         if (Input.GetKeyDown(KeyCode.C) && IsGrounded)
@@ -176,12 +181,18 @@ public class Character_Controller : MonoBehaviour
             rb.drag = GroundDrag;
         else
             rb.drag = 0;
-        if (WallRunning)
-            DesiredMoveSpeed = WallRunSpeed;
-        else if (!IsGrounded)
-            DesiredMoveSpeed = 100;
-        else
+
+        if (IsGrounded)
+        {
             DesiredMoveSpeed = Speed;
+        }
+        else
+        {
+            if (WallRunning)
+                DesiredMoveSpeed = WallRunSpeed;
+            else
+                DesiredMoveSpeed = 50;
+        }
 
         Vector3 flatVelocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         if (flatVelocity.magnitude > DesiredMoveSpeed)
@@ -190,23 +201,18 @@ public class Character_Controller : MonoBehaviour
             rb.velocity = new Vector3(limitedVelocity.x, rb.velocity.y, limitedVelocity.z);
         }
     }
-    public void Grappling(Transform GrabPoint, float GrabForce)
-    {
-        rb.velocity = new Vector3(0, 0, 0);
-        rb.AddForce((GrabPoint.position - transform.position) * GrabForce, ForceMode.Impulse);
-    }
     #endregion
     #region Slide
     void PlayerHeightController()
     {
-        transform.localScale = new Vector3(transform.localScale.x, PlayerHeight / 2, transform.localScale.z);
+        Coll.height = PlayerHeight;
     }
     void Slide()
     {
         IsSliding = true;
         CanMove = false;
         rb.drag = 0;
-        PlayerHeight = 1;
+        PlayerHeight = SlidePlayerHeight;
     }
     #endregion
     #region Jumping
@@ -224,7 +230,7 @@ public class Character_Controller : MonoBehaviour
     }
     void GroundCheck()
     {
-        IsGrounded = Physics.CheckSphere(transform.position - transform.up, 0.4f, WhatIsGround);
+        IsGrounded = Physics.CheckSphere(transform.position - transform.up, 0.35f, WhatIsGround);
     }
 
     #endregion
@@ -290,6 +296,24 @@ public class Character_Controller : MonoBehaviour
         Vector3 ForceToApply = transform.up * WallJumpUpForce + WallNormal * WallJumpSideForce;
         rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
         rb.AddForce(ForceToApply, ForceMode.Impulse);
+    }
+    #endregion
+    #region Make Hook Joint
+    public void StartGrapple(Transform HookPoint)
+    {
+        joint = gameObject.AddComponent<SpringJoint>();
+        joint.autoConfigureConnectedAnchor = false;
+        joint.connectedAnchor = HookPoint.position;
+        float DistanceFromPoint = Vector3.Distance(transform.position, HookPoint.position);
+        joint.maxDistance = DistanceFromPoint * 0.8f;
+        joint.minDistance = DistanceFromPoint * 0.3f;
+        joint.spring = 4.5f;
+        joint.damper = 7f;
+        joint.massScale = 4.5f;
+    }
+    public void StopGrapple()
+    {
+        Destroy(joint);
     }
     #endregion
 }

@@ -29,16 +29,19 @@ public class Combat_Controller : MonoBehaviour
 
     [Space]
     [Header("Grappling")]
+    public float HookSpeed;
+    public Transform HookEnd;
     public KeyCode GrabKey;
-    public float GrabForce;
+    public float GrabDistanse;
     public float GrabReloadTime;
+    public bool IsHoldingOn;
     public bool CanGrab;
     RaycastHit GrabPointHitInfo;
-    public float GrabDistanse;
     public Transform GrabPoint;
 
     [Space]
     [Header("Components")]
+    CableComponent Cable;
     Character_Controller Controller;
     Camera_Controller CameraController;
     public Enemy_Stats Estats;
@@ -46,6 +49,7 @@ public class Combat_Controller : MonoBehaviour
 
     private void Start()
     {
+        Cable = GetComponent<CableComponent>();
         Controller = GetComponent<Character_Controller>();
         CameraController = GetComponentInChildren<Camera_Controller>();
         InAction = false;
@@ -54,7 +58,6 @@ public class Combat_Controller : MonoBehaviour
     }
     private void Update()
     {
-        CheckForGrappling();
         CheckForEnemy();
         MyInput();
         if (HaveGun)
@@ -111,14 +114,19 @@ public class Combat_Controller : MonoBehaviour
         if (!InAction)
         {
             RaycastHit hit;
-            if (Physics.SphereCast(Camera.position - transform.forward / 2, 1, Camera.forward, out GrabPointHitInfo, GrabDistanse))
+            if (Physics.SphereCast(Camera.position - transform.forward / 2, 2, Camera.forward, out GrabPointHitInfo, GrabDistanse))
             {
-                if (Physics.SphereCast(Camera.position - transform.forward / 2, 1, Camera.forward, out hit, GrabDistanse) && hit.collider.CompareTag("Grab Point"))
+                if (Physics.Raycast(Camera.position + transform.forward, GrabPointHitInfo.point - (Camera.position + transform.forward), out hit, GrabDistanse))
                 {
-                    GrabPoint = GrabPointHitInfo.collider.GetComponent<Transform>();
+                    if (hit.collider.CompareTag("Hook Point"))
+                    {
+                        GrabPoint = GrabPointHitInfo.collider.GetComponentInParent<Hook_Point_Controller>().HookPoint;
+
+                        print("!!!");
+                    }
                 }
             }
-            else
+            else if (!IsHoldingOn)
                 GrabPoint = null;
         }
     }
@@ -190,6 +198,27 @@ public class Combat_Controller : MonoBehaviour
             CurrentGun.SetActive(true);
     }
     #endregion
+    #region Cable Control
+    void CableLenghtControl()
+    {
+        float lenght;
+        if (IsHoldingOn)
+            lenght = Vector3.Distance(HookEnd.position, GrabPoint.position) + 5f;
+        else
+            lenght = 0;
+        Cable.cableLength = Mathf.Lerp(Cable.cableLength, lenght, 1);
+    }
+    void MoveCableToHookPoint()
+    {
+        HookEnd.position = Vector3.Lerp(HookEnd.position, GrabPoint.position, HookSpeed * Time.deltaTime);
+        CableLenghtControl();
+    }
+    void MoveCableToPlayer()
+    {
+        HookEnd.position = Vector3.Lerp(HookEnd.position, transform.position - Vector3.up, HookSpeed / 2 * Time.deltaTime);
+        CableLenghtControl();
+    }
+    #endregion
     void MyInput()
     {
         if (Input.GetKeyDown(FatalityKey) && Estats != null)
@@ -204,12 +233,24 @@ public class Combat_Controller : MonoBehaviour
                 Estats.EController.InGrab();
             }
         }
-        if (Input.GetKeyDown(GrabKey) && GrabPoint != null)
+        if (Input.GetKeyDown(GrabKey) && !IsHoldingOn)
         {
-            CanGrab = false;
-            Controller.Grappling(GrabPoint, GrabForce);
-            Invoke(nameof(ReloadGrappling), GrabReloadTime);
+            CheckForGrappling();
+            if (GrabPoint != null)
+            {
+                Controller.StartGrapple(GrabPoint);
+                IsHoldingOn = true;
+                CanGrab = false;
+                Invoke(nameof(ReloadGrappling), GrabReloadTime);
+            }
         }
+        if (IsHoldingOn && Input.GetKeyDown(Controller.JumpButton))
+        {
+            Controller.StopGrapple();
+            IsHoldingOn = false;
+
+        }
+        
         if (Input.GetKeyDown(TakeGunKey) && CanTakeGun)
         {
             if (!HaveGun)
@@ -221,5 +262,11 @@ public class Combat_Controller : MonoBehaviour
         {
             CurrentGun.GetComponent<Gun_Controller>().Shoot();
         }
+
+        if (IsHoldingOn)
+            MoveCableToHookPoint();
+        else
+            MoveCableToPlayer();
+
     }
 }

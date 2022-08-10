@@ -248,7 +248,6 @@ public class Combat_Controller : MonoBehaviour
         {
             Controller.StopGrapple();
             IsHoldingOn = false;
-
         }
         
         if (Input.GetKeyDown(TakeGunKey) && CanTakeGun)
